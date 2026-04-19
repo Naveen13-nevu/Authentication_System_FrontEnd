@@ -1,31 +1,42 @@
 import { useState } from "react";
+import API from "../api";
 import { useNavigate } from "react-router-dom";
-import API from "../api/axios";
 import toast from "react-hot-toast";
 
-export default function VerifyOtp() {
+function VerifyOtp() {
   const [otp, setOtp] = useState("");
   const navigate = useNavigate();
+
   const email = localStorage.getItem("email");
 
-  const handleSubmit = async (e) => {
+  if (!email) {
+    return <h4 className="text-center mt-5">No email found. Please register again.</h4>;
+  }
+
+  const handleVerify = async (e) => {
     e.preventDefault();
     try {
       await API.post("/verify", { email, otp });
-      toast.success("Account verified");
+      toast.success("Account Verified ✅");
       navigate("/login");
     } catch (err) {
-      toast.error(err.response?.data || "Invalid OTP");
+      toast.error(err.response?.data?.message || "Invalid OTP");
     }
   };
 
   return (
-    <div style={{ padding: 20 }}>
-      <h2>Verify OTP</h2>
-      <form onSubmit={handleSubmit}>
-        <input placeholder="Enter OTP" onChange={(e) => setOtp(e.target.value)} required /><br/>
-        <button type="submit">Verify</button>
-      </form>
+    <div className="container mt-5">
+      <div className="card p-4 shadow col-md-4 mx-auto">
+        <h4 className="text-center mb-3">Verify OTP</h4>
+
+        <form onSubmit={handleVerify}>
+          <input className="form-control mb-3" placeholder="Enter OTP" value={otp} onChange={(e) => setOtp(e.target.value)} required />
+
+          <button className="btn btn-success w-100">Verify</button>
+        </form>
+      </div>
     </div>
   );
 }
+
+export default VerifyOtp;
