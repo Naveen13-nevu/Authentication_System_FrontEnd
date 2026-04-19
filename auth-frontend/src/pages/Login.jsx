@@ -3,13 +3,13 @@ import API from "../api";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
-function Login() {
+const Login = () => {
+  const navigate = useNavigate();
+
   const [data, setData] = useState({
     email: "",
-    password: "",
+    password: ""
   });
-
-  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
@@ -20,28 +20,30 @@ function Login() {
 
     try {
       const res = await API.post("/login", data);
+
       localStorage.setItem("token", res.data.token);
-      toast.success("Login successful 🚀");
+
+      toast.success("Login successful");
+
       navigate("/dashboard");
+
     } catch (err) {
-      toast.error(err.response?.data?.message || "Login failed");
+      toast.error(err.response?.data || "Login failed");
     }
   };
 
   return (
-    <div className="container mt-5">
-      <div className="card p-4 shadow col-md-4 mx-auto">
-        <h4 className="text-center mb-3">Login</h4>
+    <div className="d-flex justify-content-center align-items-center vh-100 bg-light">
+      <form onSubmit={handleLogin} className="card p-4 shadow" style={{ width: "350px" }}>
+        <h3 className="text-center mb-3">Login</h3>
 
-        <form onSubmit={handleLogin}>
-          <input className="form-control mb-3" name="email" placeholder="Email" onChange={handleChange} required />
-          <input className="form-control mb-3" type="password" name="password" placeholder="Password" onChange={handleChange} required />
+        <input type="email" name="email" placeholder="Email" className="form-control mb-2" onChange={handleChange} required />
+        <input type="password" name="password" placeholder="Password" className="form-control mb-3" onChange={handleChange} required />
 
-          <button className="btn btn-dark w-100">Login</button>
-        </form>
-      </div>
+        <button className="btn btn-primary w-100">Login</button>
+      </form>
     </div>
   );
-}
+};
 
 export default Login;

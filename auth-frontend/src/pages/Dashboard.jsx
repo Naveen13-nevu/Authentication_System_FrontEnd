@@ -1,25 +1,13 @@
-import { useNavigate } from "react-router-dom";
-
-function Dashboard() {
-  const navigate = useNavigate();
-
-  const logout = () => {
-    localStorage.removeItem("token");
-    navigate("/login");
-  };
+const Dashboard = () => {
+  const token = localStorage.getItem("token");
 
   return (
-    <div className="container mt-5 text-center">
-      <div className="card p-4 shadow col-md-5 mx-auto">
-        <h2>Welcome 🎉</h2>
-        <p>You are successfully logged in.</p>
-
-        <button className="btn btn-danger" onClick={logout}>
-          Logout
-        </button>
-      </div>
+    <div className="text-center mt-5">
+      <h2>Welcome 🎉</h2>
+      <p>Your Token:</p>
+      <textarea value={token} readOnly rows={5} cols={50} />
     </div>
   );
-}
+};
 
 export default Dashboard;

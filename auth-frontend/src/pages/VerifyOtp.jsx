@@ -3,40 +3,49 @@ import API from "../api";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
-function VerifyOtp() {
-  const [otp, setOtp] = useState("");
+const VerifyOtp = () => {
   const navigate = useNavigate();
 
-  const email = localStorage.getItem("email");
+  const [otp, setOtp] = useState("");
 
-  if (!email) {
-    return <h4 className="text-center mt-5">No email found. Please register again.</h4>;
-  }
+  // ✅ GET EMAIL FROM LOCAL STORAGE
+  const email = localStorage.getItem("email");
 
   const handleVerify = async (e) => {
     e.preventDefault();
+
     try {
-      await API.post("/verify", { email, otp });
-      toast.success("Account Verified ✅");
+      const res = await API.post("/verify", {
+        email: email,   // ✅ FIXED
+        otp: otp
+      });
+
+      toast.success(res.data);
+
       navigate("/login");
+
     } catch (err) {
-      toast.error(err.response?.data?.message || "Invalid OTP");
+      toast.error(err.response?.data || "Invalid OTP");
     }
   };
 
   return (
-    <div className="container mt-5">
-      <div className="card p-4 shadow col-md-4 mx-auto">
-        <h4 className="text-center mb-3">Verify OTP</h4>
+    <div className="d-flex justify-content-center align-items-center vh-100 bg-light">
+      <form onSubmit={handleVerify} className="card p-4 shadow" style={{ width: "350px" }}>
+        <h3 className="text-center mb-3">Verify OTP</h3>
 
-        <form onSubmit={handleVerify}>
-          <input className="form-control mb-3" placeholder="Enter OTP" value={otp} onChange={(e) => setOtp(e.target.value)} required />
+        <input
+          type="text"
+          placeholder="Enter OTP"
+          className="form-control mb-3"
+          onChange={(e) => setOtp(e.target.value)}
+          required
+        />
 
-          <button className="btn btn-success w-100">Verify</button>
-        </form>
-      </div>
+        <button className="btn btn-success w-100">Verify</button>
+      </form>
     </div>
   );
-}
+};
 
 export default VerifyOtp;
