@@ -22,7 +22,7 @@ const Register = () => {
     try {
       const res = await API.post("/register", data);
 
-      // ✅ STORE EMAIL (IMPORTANT FIX)
+      
       localStorage.setItem("email", data.email);
 
       toast.success(res.data);

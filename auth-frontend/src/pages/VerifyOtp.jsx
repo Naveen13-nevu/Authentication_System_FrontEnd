@@ -8,7 +8,7 @@ const VerifyOtp = () => {
 
   const [otp, setOtp] = useState("");
 
-  // ✅ GET EMAIL FROM LOCAL STORAGE
+  
   const email = localStorage.getItem("email");
 
   const handleVerify = async (e) => {
@@ -16,7 +16,7 @@ const VerifyOtp = () => {
 
     try {
       const res = await API.post("/verify", {
-        email: email,   // ✅ FIXED
+        email: email,   
         otp: otp
       });
 
