@@ -24,7 +24,7 @@ const Dashboard = () => {
         <h2 className="mb-3">Login Successful</h2>
 
         <p className="text-muted">
-          Welcome to your dashboard. Your authentication system is working perfectly.
+          Welcome to your dashboard.
         </p>
 
         <button
